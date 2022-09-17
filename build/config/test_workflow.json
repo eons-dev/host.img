@@ -1,0 +1,20 @@
+{
+  "clear_build_path" : true,
+  "build_in": "image",
+  "next": [
+    {
+      "build": "arbitrary",
+      "config" : {
+        "clear_build_path" : false,
+        "commands": [
+          "sudo apt install qemu-utils",
+          "sudo modprobe nbd max_part=8",
+          "qemu-img create -f qcow2 test.qcow2 256M",
+          "sudo qemu-nbd --connect=/dev/nbd0 test.qcow2",
+          "fdisk /dev/nbd0 -l",
+          "chroot --help"
+        ]
+      }
+    }
+  ]
+}

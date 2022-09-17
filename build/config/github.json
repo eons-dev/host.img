@@ -10,7 +10,7 @@
       "build_in" : "image",
       "config" : {
         "clear_build_path" : false,
-        "proxy" : "../../config/local.json",
+        "proxy" : "../../config/test_workflow.json",
         "next" : [
           {
             "run_when_any" : [
