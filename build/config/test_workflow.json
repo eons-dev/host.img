@@ -11,8 +11,8 @@
           "sudo modprobe nbd max_part=8",
           "qemu-img create -f qcow2 test.qcow2 256M",
           "sudo qemu-nbd --connect=/dev/nbd0 test.qcow2",
-          "fdisk /dev/nbd0 -l",
-          "chroot --help"
+          "sudo fdisk /dev/nbd0 -l",
+          "sudo chroot --help"
         ]
       }
     }
