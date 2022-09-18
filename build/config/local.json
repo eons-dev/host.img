@@ -1,41 +1,47 @@
 {
   "clear_build_path" : true,
-  "build_in": "image",
   "next": [
     {
       "build": "arbitrary",
+      "build_in": "image",
       "config" : {
         "clear_build_path" : false,
         "commands": [
           "wget https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2.SHA256",
-          "wget https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2",
+          "wget --progress=dot:giga https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2",
           "sha256sum -c Arch-Linux-x86_64-cloudimg.qcow2.SHA256",
+          "sudo apt install qemu-utils",
           "sudo modprobe nbd max_part=8",
           "sudo qemu-nbd --connect=/dev/nbd0 Arch-Linux-x86_64-cloudimg.qcow2",
-          "fdisk /dev/nbd0 -l",
+          "sudo fdisk /dev/nbd0 -l",
           "sudo mount /dev/nbd0p2 /mnt/arch/",
           "sudo mount -o bind /dev /mnt/arch/dev/",
           "sudo mount -o bind /proc /mnt/arch/proc",
           "sudo mount -o bind /sys /mnt/arch/sys/",
-          "sudo cp -rv ../src/* /mnt/arch/tmp/",
-          "sudo chroot /mnt/arch /bin/bash /tmp/configure.sh; umount /mnt/arch/; qemu-nbd --disconnect /dev/nbd0"
-        ]
-      }
-    },
-    {
-      "build_in": "./",
-      "build": "docker",
-      "build_in" : "docker",
-      "config" : {
-        "clear_build_path" : false,
-        "base_image" : "scratch",
-        "image_name" : "eons/img_host",
-        "image_os" : "arch",
-        "also": [
-          "ADD --chown=107:107 Arch-Linux-x86_64-cloudimg.qcow2 /disk/"
+          "sudo cp -rv ./src/* /mnt/arch/tmp/",
+          "sudo chroot /mnt/arch /bin/bash /tmp/configure.sh",
+          "sudo fuser -km /mnt/arch; sleep 5",
+          "sudo umount /mnt/arch/dev/",
+          "sudo umount /mnt/arch/proc",
+          "sudo umount /mnt/arch/sys/",
+          "sudo umount /mnt/arch/",
+          "sudo qemu-nbd --disconnect /dev/nbd0"
         ],
-        "tags" : [
-          "latest"
+        "next": [
+          {
+            "build": "docker",
+            "build_in": "docker",
+            "config" : {
+              "clear_build_path" : false,
+              "image_name" : "eons/img_host",
+              "also": [
+                "ADD --chown=107:107 Arch-Linux-x86_64-cloudimg.qcow2 /disk/"
+              ],
+              "tags" : [
+                "latest"
+              ]
+            }
+          }
         ]
       }
     }

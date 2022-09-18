@@ -7,10 +7,10 @@
         "release"
       ],
       "build" : "proxy",
-      "build_in" : "image",
+      "build_in" : "local",
       "config" : {
         "clear_build_path" : false,
-        "proxy" : "../../config/test_workflow.json",
+        "proxy" : "../../config/local.json",
         "next" : [
           {
             "run_when_any" : [

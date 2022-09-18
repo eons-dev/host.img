@@ -3,7 +3,9 @@ pacman-key --populate
 pacman -S docker --noconfirm
 systemctl enable docker
 
-cat << EOF > /etc/systemd/system/hosted.service
+mkdir -p /etc/run
+touch /etc/run/image
+cat << 'EOF' > /etc/systemd/system/hosted.service
 [Unit]
 Description=Containerized application
 After=docker.service
@@ -17,5 +19,5 @@ Restart=always
 WantedBy=multi-user.target
 EOF
 
-systemctl daemon-reload
+systemctl daemon-reload #doesn't work in chroot but is harmless
 systemctl enable hosted
