@@ -3,8 +3,10 @@ pacman-key --populate
 pacman -S docker --noconfirm
 systemctl enable docker
 
-mkdir -p /etc/run
-touch /etc/run/image
+mkdir -p /guest
+touch /guest/image
+mkdir -p /root/.config/rclone
+touch /guest/rclone
 cat << 'EOF' > /etc/systemd/system/hosted.service
 [Unit]
 Description=Containerized application
@@ -12,7 +14,7 @@ After=docker.service
 
 [Service]
 Type=exec
-ExecStart=docker run --network host --privileged $(cat /etc/run/image)
+ExecStart=bash -c "docker run --network host --privileged --mount type=bind,source=/guest/rclone,target=/root/.config/rclone/rclone.conf,readonly $(cat /guest/image)"
 Restart=always
 
 [Install]
