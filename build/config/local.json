@@ -14,6 +14,7 @@
           "sudo modprobe nbd max_part=8",
           "sudo qemu-nbd --connect=/dev/nbd0 Arch-Linux-x86_64-cloudimg.qcow2",
           "sudo fdisk /dev/nbd0 -l",
+          "sudo mkdir -p /mnt/arch",
           "sudo mount /dev/nbd0p2 /mnt/arch/",
           "sudo mount -o bind /dev /mnt/arch/dev/",
           "sudo mount -o bind /proc /mnt/arch/proc",
